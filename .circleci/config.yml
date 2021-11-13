@@ -27,6 +27,7 @@ jobs:
       - run:
           name: Scan Image
           command: |
+            TAG="0.1.${CIRCLE_BUILD_NUM}"
             curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.20.2
             echo "scanning started"
             trivy image  --severity HIGH,CRITICAL veyselsahin16/docker-bitcoind:$TAG 
