@@ -1,7 +1,15 @@
+variable "access_key" {
+  type        = string
+  description = ""
+}
+variable "secret_key" {
+  type        = string
+  description = ""
+}
 provider "aws" {
   region     = "us-west-2"
-  access_key = "AKIAXENF7UGVGOJK4JH5"
-  secret_key = "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"
+  access_key = var.access_key
+  secret_key = var.secret_key
 }
 variable "IMAGE" {
   type        = string
