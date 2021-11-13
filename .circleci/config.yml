@@ -25,9 +25,9 @@ jobs:
       - run:
           name: Scan Image
           command: |
-            curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.20.2
             echo "scanning started"
-            grype veyselsahin16/docker-bitcoind:$TAG --scope all-layers
+            trivy image  --severity HIGH,CRITICAL veyselsahin16/docker-bitcoind:$TAG 
             echo "scanning finished"
       - run:
           name: Push Docker image
