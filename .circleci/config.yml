@@ -18,11 +18,19 @@ jobs:
 
 
       - run:
-          name: Build and push Docker image
+          name: Build Docker image
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
-            ls -la 
             docker build -t veyselsahin16/docker-bitcoind:$TAG .
+      - run:
+          name: Scan Image
+          command: |
+            curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+            grype veyselsahin16/docker-bitcoind:$TAG --scope all-layers
+      - run:
+          name: Push Docker image
+          command: |
+            TAG="0.1.${CIRCLE_BUILD_NUM}"
             docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
             docker push veyselsahin16/docker-bitcoind:$TAG
 
