@@ -1,7 +1,8 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-
+orbs:
+  terraform: circleci/terraform@3.0.0
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -28,20 +29,36 @@ jobs:
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
             curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.20.2
-            echo "scanning started"
-            trivy image  --severity HIGH,CRITICAL veyselsahin16/docker-bitcoind:$TAG 
-            echo "scanning finished"
-
+            trivy image  --severity HIGH,CRITICAL veyselsahin16/docker-bitcoind:$TAG
       - run:
           name: Push Docker Image
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
             docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
             docker push veyselsahin16/docker-bitcoind:$TAG
+  deploy_infrastructure:
+    executor: terraform/default
+    steps:
+      - checkout
+      - terraform/init:
+          path: .
+      - terraform/validate:
+          path: .
+      - terraform/fmt:
+          path: .
+      - terraform/plan:
+          path: .
+      - terraform/apply:
+          path: .
+    working_directory: ~/src
+
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build:
     jobs:
       - build-artifact
+      - deploy_infrastructure
+
