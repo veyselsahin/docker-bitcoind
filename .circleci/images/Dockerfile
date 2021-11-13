@@ -38,6 +38,6 @@ RUN apt update \
     && apt install -y --no-install-recommends gosu \
     && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && ln -sv /opt/bitcoin/bin/* /usr/local/bin
-COPY ./docker-entrypoint.sh /usr/local/bin
+COPY docker-entrypoint.sh /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["-conf=/opt/bitcoin/bin/bitcoin.conf", "-printtoconsole"]
