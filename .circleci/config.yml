@@ -22,6 +22,8 @@ jobs:
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
             docker build -t veyselsahin16/docker-bitcoind:$TAG .
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+            docker push veyselsahin16/docker-bitcoind:$TAG
       - run:
           name: Scan Image
           command: |
@@ -29,12 +31,8 @@ jobs:
             echo "scanning started"
             trivy image  --severity HIGH,CRITICAL veyselsahin16/docker-bitcoind:$TAG 
             echo "scanning finished"
-      - run:
-          name: Push Docker image
-          command: |
-            TAG="0.1.${CIRCLE_BUILD_NUM}"
-            docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-            docker push veyselsahin16/docker-bitcoind:$TAG
+
+           
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
