@@ -5,27 +5,34 @@ This project is for xapo case study. Bitcoin core project used for run bitcoind.
 
 A non-root user(bitcoin) used for docker run. Bitcoind daemon configuration can be customized via bitcoin.conf.
 
-Aquasec trivy used for security scanning. We can change fail threshold by chaning --severity parameter. Detailed info: https://aquasecurity.github.io/trivy/v0.19.2/vulnerability/examples/filter/
+Aquasec trivy used for security scanning. We can change fail threshold by chaning --severity parameter. We can use multiple threshold by separating commas:
+
+`--severity HIGH,CRITICAL`.
+
+Detailed info: https://aquasecurity.github.io/trivy/v0.19.2/vulnerability/examples/filter/
 
 Available parameters:
 
-HIGH
+`HIGH`
 
-CRITICAL
+`CRITICAL`
 
-MEDIUM
+`MEDIUM`
 
-LOW
+`LOW`
 
 ## Pipeline
-Pipeline has five steps:
+Pipeline has two jobs:
+build-artifact:
 
-checkout: Checkouts code form GitHub repository
+    checkout: Checkouts code form GitHub repository
 
-setup_remote_docker: Setups a remote docker daemon. CircleCI handles this stage by itself.
+    setup_remote_docker: Setups a remote docker daemon. CircleCI handles this stage by itself.
 
-Build Docker Image: Building and pushing docker image
+    Build Docker Image: Building and pushing docker image
 
-Scan Image: Image scanning process. If the image has one or more vulnerabilies in range of provided severity the pipeline fails and pushing step will not worked. We prevent vulnerable image to reach out image registry by this way.
+    Scan Image: Image scanning process. If the image has one or more vulnerabilies in range of provided severity the pipeline fails and pushing step will not worked. We prevent vulnerable image to reach out image registry by this way.
 
-Push Docker Image: Pushing image to given registry. $DOCKER_LOGIN and $DOCKER_PASSWORD variables set on CircleCI UI.
+    Push Docker Image: Pushing image to given registry. `$DOCKER_LOGIN` and `$DOCKER_PASSWORD` variables set on CircleCI UI.
+
+deploy_infrastructure:

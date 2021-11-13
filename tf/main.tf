@@ -1,3 +1,12 @@
+provider "aws" {
+  region     = "us-west-2"
+  access_key = "AKIAXENF7UGVGOJK4JH5"
+  secret_key = "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"
+}
+variable "IMAGE" {
+  type        = string
+  description = ""
+}
 resource "aws_vpc" "foo" {
   cidr_block = "10.0.0.0/16"
 
@@ -24,9 +33,6 @@ resource "aws_efs_file_system" "efs" {
 resource "aws_efs_mount_target" "mount" {
   file_system_id = aws_efs_file_system.efs.id
   subnet_id      = aws_subnet.alpha.id
-  tags = {
-    Name = "ECS-EFS-MNT"
-  }
 }
 
 resource "aws_ecs_cluster" "ecs-bitcoin" {
@@ -47,6 +53,7 @@ resource "aws_ecs_service" "bar" {
 
 resource "aws_ecs_task_definition" "efs-task" {
   family        = "efs-example-task"
+  network_mode = "awsvpc"
 
   container_definitions = <<DEFINITION
 [
@@ -67,7 +74,7 @@ resource "aws_ecs_task_definition" "efs-task" {
           }
       ],
       "name": "docker-bitcoind",
-      "image": "nginx"
+      "image": "${var.IMAGE}"
   }
 ]
 DEFINITION
