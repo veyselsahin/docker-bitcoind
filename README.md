@@ -17,7 +17,7 @@ Available parameters:
 
 `CRITICAL`
 
-`MEDIUM`
+`MEDIUM`aaa
 
 `LOW`
 
