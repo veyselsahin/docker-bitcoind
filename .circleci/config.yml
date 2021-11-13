@@ -25,7 +25,7 @@ jobs:
       - run:
           name: Scan Image
           command: |
-            curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+            curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin
             grype veyselsahin16/docker-bitcoind:$TAG --scope all-layers
       - run:
           name: Push Docker image
