@@ -35,6 +35,7 @@ build-artifact:
 
     Push Docker Image: Pushing image to given registry. `$DOCKER_LOGIN` and `$DOCKER_PASSWORD` variables set on CircleCI UI.
 
+
 deploy_infrastructure:
 
     - checkout
@@ -48,4 +49,3 @@ deploy_infrastructure:
         path: .
     - terraform/apply:
         var: "IMAGE=veyselsahin16/docker-bitcoind:0.1.${CIRCLE_BUILD_NUM},access_key=${access_key},secret_key=${secret_key}"
-..
