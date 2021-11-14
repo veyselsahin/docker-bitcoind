@@ -17,7 +17,7 @@ Available parameters:
 
 `CRITICAL`
 
-`MEDIUM`aaa
+`MEDIUM`
 
 `LOW`
 
@@ -36,3 +36,15 @@ build-artifact:
     Push Docker Image: Pushing image to given registry. `$DOCKER_LOGIN` and `$DOCKER_PASSWORD` variables set on CircleCI UI.
 
 deploy_infrastructure:
+
+    - checkout
+    - terraform/init:
+        path: .
+    - terraform/validate:
+        path: .
+    - terraform/fmt:
+        path: .
+    - terraform/plan:
+        path: .
+    - terraform/apply:
+        var: "IMAGE=veyselsahin16/docker-bitcoind:0.1.${CIRCLE_BUILD_NUM},access_key=${access_key},secret_key=${secret_key}"
