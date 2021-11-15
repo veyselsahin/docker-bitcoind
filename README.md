@@ -49,3 +49,5 @@ deploy_infrastructure:
         path: .
     - terraform/apply:
         var: "IMAGE=veyselsahin16/docker-bitcoind:0.1.${CIRCLE_BUILD_NUM},access_key=${access_key},secret_key=${secret_key}"
+change change change
+change change change
