@@ -65,4 +65,3 @@ workflows:
     jobs:
       - build-artifact
       - deploy_infrastructure
-
